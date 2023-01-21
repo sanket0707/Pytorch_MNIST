@@ -1,0 +1,98 @@
+
+# step 1 import libraries
+import torch 
+import torch.nn as nn # linear , convolutional layer etc. 
+import torch.optim as optim # SGD optimiser, adam optimizer
+import torch.nn.functional as F # activation function 
+import torchvision.datasets as datasets
+from torch.utils.data import DataLoader # let you makes batches of data etc. 
+import torchvision.transforms as transforms
+
+
+# step 2 - Create fully connected network
+class NN(nn.Module): # create a class NN from nn.Module
+    def __init__(self, input_size, num_classes): # inherit from nn.Module by initialising it. 
+    #print("sanket")
+        super(NN,self).__init__() # supper cause the initialisation of parent class
+        self.fc1 = nn.Linear(input_size,50)
+        self.fc2 = nn.Linear(50, num_classes)
+        
+    def forward(self,x):
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+    
+model = NN(784,10)
+x = torch.randn(64,784)
+print(model(x).shape)
+
+
+# Step 3 - set device to GPU or CPU
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# Step 4 Define Hyperparameters
+input_size = 784
+num_classes = 10
+learning_Rate = 0.001
+batch_size = 64
+num_epochs = 1
+
+# Step 5 Load  data
+train_dataset = datasets.MNIST(root='dataset/', train=True, transform = transforms.ToTensor(), download = True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size,shuffle=True)
+test_dataset = datasets.MNIST(root='dataset/', train=False, transform = transforms.ToTensor(), download = True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size,shuffle=True)
+
+# Step 6 - Initialise the Network
+model = NN(input_size=input_size, num_classes=num_classes).to(device)
+
+# Step 6 - Loss and Optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(),lr=learning_Rate)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
